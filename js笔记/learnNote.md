@@ -82,5 +82,67 @@ console.log(admin.name);//输出 Pete
 
 
 
-综上所述，如果我们想赋值一个一模一样的对象出来，不能够直接用" = "赋值符号，应该使用
+综上所述，如果我们想赋值一个一模一样的对象出来，不能够直接用" = "赋值符号，应该使用克隆与合并，它分为浅拷贝和深拷贝，浅拷贝具体细节参考教程，这里附上自己写的深拷贝代码，这里我使用了两种方法，一种是循环迭代，一种是递归。
+
+- 循环迭代：
+
+```javascript
+let user = {
+  obj : {
+    m : 2,
+  },
+  obj2 : {
+    k : 3,
+  },
+  n : 1,
+  x : 2,
+};
+
+let clone = {};
+
+//循环方式
+for(let key in user){
+  if(typeof(user[key]) === "object"){
+    clone[key] = {};
+    for(let key_ in user[key]){
+      clone[key][key_] = user[key][key_];
+    }
+  }else{
+    clone[key] = user[key];
+  }
+}
+```
+
+- 递归：
+
+```javascript
+let user = {
+  obj : {
+    m : 2,
+  },
+  obj2 : {
+    k : 3,
+  },
+  n : 1,
+  x : 2,
+};
+
+let clone = {};
+function deepClone(clone,user){
+  for(let key in user){
+    if(typeof(user[key]) === "object"){
+      clone[key] = {};
+      deepClone(clone[key],user[key]);
+    }else{
+      clone[key] = user[key];
+    }
+  }
+}
+
+deepClone(clone,user);
+
+user.obj.m = 3;
+user.obj2.k = 6;
+console.log(user);
+```
 
