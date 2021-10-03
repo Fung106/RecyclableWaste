@@ -146,3 +146,116 @@ user.obj2.k = 6;
 console.log(user);
 ```
 
+
+
+## 垃圾回收（重要）
+
+JavaScript的内存管理概念是**可达性**。简而言之，只要它（某个变量，某个对象，某个函数等）从**全局环境为起点**一直搜寻是可以**被访问的，被找到的**，就不会被清理。具体图例教程已经画得很清晰。后面涉及到这个点的还有**词法环境**（重要），它是一个非常特殊的对象，用于描述JavaScript是如何运作的，它一样遵循**可达性**。
+
+
+
+## 函数
+
+在JavaScript里，函数是一个值，这个值的类型是引用类型，是一个特殊的对象。
+
+当只有函数名字加上一对括号的时候，才是调用函数。
+
+若函数内，空值的 return 或没有 return 的函数返回值为 undefined。
+
+```javascript
+function test(){
+  console.log("hello");
+}
+
+console.log(test);
+console.log(test());
+
+/*
+
+运行结果：
+console.log(test) ———> [Function: test] :只写函数名字的时候，它就仅表示是一个函数，因为在JavaScript里，函数也是一个值
+test() ———> hello :函数后带一对括号，就等于调用了这个函数
+console.log(test()) ———> undefined :打印函数的调用，因为此函数是空值的 return 或没有 return 的函数返回值，所以打印undefined
+
+*/
+```
+
+
+
+## this指向
+
+**this**这个关键字指向的是对象，它只能存在函数里，且在JavaScript中，**this**能够存在于任何的函数中，即使这个函数不是对象的方法（函数作为对象的属性时，我们称这个函数为方法）。那么我们就要搞清楚这个**this**到底是指向谁。
+
+在JavaScript中，我把函数分三种，第一种是普通函数，第二种是对象的方法，第三种是构造器。他们的形式都是一样的，但是因为**this**的指向原因我才把它分成三种。下面分别介绍每种函数中**this**指向的值是什么：
+
+- 普通函数
+
+当**this**存在普通的函数里，**this**的值是undefined。
+
+```javascript
+"use strict"
+function test(){
+  console.log(this.name);
+}
+
+test();//error:Cannot read property 'name' of undefined
+```
+
+因为**this**是undefined，所以它根本就找不到name这个属性（name只是个例子，换作其他字母都一样）。所以就会报错。
+
+
+
+- 对象的方法
+
+上面提到当函数作为对象的属性时，我们称这个函数为方法。**this**存在于方法中的时候，那么这个**this**就等于调用此方法的对象的引用。
+
+```javascript
+"use strict"
+
+let user = {
+  name : "Pete",
+  display(){
+    console.log(this.name);
+  }
+}
+
+user.display();//Pete
+user["display"]();//Pete
+```
+
+以上代码展示了两种访问属性的形式，可以看出display这个方法被user调用了，所以方法里的**this**就等于user这个对象的引用，所以它可以访问到name这个属性。简单地说，方法内的**this**的值等于"."或"[]"前面的对象的引用。
+
+
+
+- 构造器
+
+构造器的命名约定是首字母必须大写，用于区分它是个构造器，然后用**new**去调用它。构造器很特殊，它里面的**this**是用于创造对象的引用，来让另一个对象的引用指向同一个对象。
+
+一般来说，构造器的格式是这样的：
+
+```javascript
+function User(){
+  this.name = "Pete";
+}
+```
+
+但是它内部是隐藏了一部分的操作，如下代码：
+
+```javascript
+"use strict"
+
+function User(){
+  //let this = {}; 隐式创建一个名为this的对象的引用，它指向一个什么属性都没有的对象
+  this.name = "Pete";//为这个对象添加属性
+  //return this; 这个构造器最后隐式返回这个this
+}
+
+let user = new User();//构造器User返回了this，约等于let user = this，user也指向了this指向的对象
+console.log(user.name);//Pete
+```
+
+<u>**综上所述，this存在于对象的方法中，且方法被对象的引用所调用的时候，this就有值，等于调用那个方法的对象的引用**</u>
+
+想要使普通函数内的**this**也有值的话还是有办法的，这个办法在教程的章节”装饰器模式和转发，call/apply“与”函数绑定“有介绍。
+
+***注意：箭头函数形式没有this。***
