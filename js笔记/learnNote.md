@@ -1,6 +1,6 @@
 # JavaScript学习笔记（ES6）
 
-感谢：[现代 JavaScript 教程](https://zh.javascript.info/)，本笔记只记录我所思考的，语法、方法等细节直接参考教程
+感谢：[现代 JavaScript 教程](https://zh.javascript.info/)，本笔记只记录我所思考的，语法、方法等细节就直接参考教程
 
 
 
@@ -259,3 +259,222 @@ console.log(user.name);//Pete
 想要使普通函数内的**this**也有值的话还是有办法的，这个办法在教程的章节”装饰器模式和转发，call/apply“与”函数绑定“有介绍。
 
 ***注意：箭头函数形式没有this。***
+
+
+
+## 变量的作用域
+
+具体的原理教程已经讲得很清晰，这个是我对教程某些地方的一些补充和理解。这些都是自己私底下写写画画证实出来的。
+
+- 每个代码块都是有它的词法环境
+
+因为教程上只提到了脚本（全局）和函数的词法环境，所以这里作为补充说明每个代码块都是有词法环境的（针对ES6，ES5的代码块就没有词法环境）。
+
+这里所说的代码块有：普通的代码块" {...} "、if、while、for、switch等。下面是代码与图示：
+
+代码如下：
+
+```javascript
+"use strict"
+let i = 0;
+
+//代码块1
+{
+  let j = 1;
+  console.log(i);//0
+  console.log(j);//1
+}
+
+//代码块2
+{
+  let k = 2;
+  console.log(i);//0
+  console.log(k);//2
+  console.log(j);//error
+}
+```
+
+执行流程图示如下：
+
+1. <img src="images/词法环境/词法环境-全局环境.png" style="zoom:60%;" />
+2. <img src="images/词法环境/词法环境-代码块1词法环境.png" style="zoom:60%;" />
+3. <img src="images/词法环境/词法环境-代码块2词法环境.png" style="zoom:60%;" />
+
+**当代码要访问一个变量时 —— 首先会搜索内部词法环境，然后搜索外部环境，然后搜索更外部的环境，以此类推，直到全局词法环境。**所以上述代码的代码块2的**" console.log(j); "**语句就会报错，因为无法搜索到变量" j "。
+
+下面展示嵌套代码块的代码与图例：
+
+代码如下：
+
+```javascript
+"use strict"
+let i = 0;
+
+//嵌套代码块
+{
+  let j = 1;
+  {
+    let k = 2;
+    {
+      console.log(i);//0
+      console.log(j);//1
+      console.log(k);//2
+    }
+  }
+}
+```
+
+图例如下：
+
+![](images/词法环境/词法环境-嵌套代码块.png)
+
+在嵌套3的词法环境中执行的三个打印语句，它们的变量" i、j、k "都是一层一层往外找，且都能找到，所以成功依次输出" 0,1,2 "。
+
+这里用了普通的代码块作为例子，实际上，其余的代码块（if，while，for，switch等）的原理也是这样子的，因此就不再把它们都全部列举出来。
+
+
+
+- 函数的调用与位置无关
+
+教程上提到：**所有的函数在“诞生”时都会记住创建它们的词法环境。所有函数都有名为 `[[Environment]]` 的隐藏属性，该属性保存了对创建该函数的词法环境的引用。**
+
+那么意思就是，如果一个函数被声明、被创建于全局，那么这个函数的隐藏属性[[Environment]]就会保存这个全局的词法环境的引用，这个引用指向全局，把全局换作其他词法环境也同理。
+
+下面是证实函数的调用与位置无关的代码和图示：
+
+代码如下：
+
+```javascript
+"use strict"
+
+function test(){
+  console.log(i);
+}
+let i = 0;
+
+{
+  let i = 1;
+  test();//0
+}
+```
+
+因为函数test被创建于全局词法环境，所以它的隐藏属性[[Environment]]就会保存全局词法环境的引用，当调用这个函数的时候，就会给函数test创建一个词法环境，然后指向全局词法环境，而不是指向代码块的词法环境，所以随后输出的是全局词法环境的" i "而不是代码块词法环境的" i "。如图所示：
+
+<img src="images/词法环境/词法环境-函数调用.png" style="zoom:60%;" />
+
+
+
+### 词法环境的垃圾收集
+
+教程上说到：**通常，函数调用完成后，会将词法环境和其中的所有变量从内存中删除。因为现在没有任何对它们的引用了。与 JavaScript 中的任何其他对象一样，词法环境仅在可达时才会被保留在内存中。**我认为，这里也应该加上其他的代码块，当代码块执行完毕后，也会将词法环境和其中的所有变量从内存中删除。
+
+若某个函数或者代码块内创建了另一个函数，并且在执行完毕后这个被创建的函数仍然可达，那么这个被创建的函数就不会被清除，又因为这个函数的隐藏属性[[Environment]]会记录创建它的词法环境，所以创建它的词法环境也是可达的，所以创建它的词法环境也不会被清楚。下面是代码与图示：
+
+1.函数中嵌套函数（这种也就称之为**闭包**）：
+
+代码如下：
+
+```javascript
+"use strict"
+
+function f() {
+  let value = 123;
+
+  return function() {//在函数f内创建了一个匿名函数
+    console.log(value);
+  }
+}
+
+let g = f(); // g.[[Environment]] 存储了对相应 f() 调用的词法环境的引用
+g();//调用这个从函数f创建并返回的匿名函数，输出123
+```
+
+图示：
+
+（1）<img src="images/词法环境/词法环境-闭包1.png" style="zoom:60%;" />
+
+（2）<img src="images/词法环境/词法环境-闭包2.png" style="zoom:60%;" />
+
+（3）<img src="images/词法环境/词法环境-闭包3.png" style="zoom:60%;" />
+
+（4）<img src="images/词法环境/词法环境-闭包4.png" style="zoom:60%;" />
+
+每当调用一次函数的时候，都会重新创建一个新的词法环境，如下代码与图示：
+
+代码如下：
+
+```javascript
+"use strict"
+
+function makeCounter() {
+  let count = 0;
+
+  return function() {
+    return count++;
+  };
+}
+
+let counter = makeCounter();
+let counter2 = makeCounter();
+
+console.log( counter() ); // 0
+console.log( counter() ); // 1
+
+console.log( counter2() ); // 0
+console.log( counter2() ); // 1
+```
+
+图示：
+
+（1）调用两次函数makeCounter
+
+<img src="images/词法环境/词法环境-重复调用函数.png" style="zoom:60%;" />
+
+（2）分别调用两次函数counter1和函数counter2
+
+第一次：
+
+<img src="images/词法环境/词法环境-重复调用函数2.png" style="zoom:60%;" />
+
+第二次：
+
+<img src="images/词法环境/词法环境-重复调用函数3.png" style="zoom:60%;" />
+
+2.代码块中创建函数
+
+在这里我是用for循环的代码块作为例子，我认为用循环做例子更有代表性，因为每一次循环，都会清除旧的词法环境，创建新的词法环境，如果我在循环的词法环境中创建函数，并且让它可达，那么就相当于每次循环的词法环境都不会被清除，而其他的代码块，例如if、{...}，它们比循环要简单，知道了循环代码块是如何运作的，那么它们也只是同理可得。下面是代码和图示。
+
+代码：
+
+```JavaScript
+"use strict"
+
+function makeArmy() {
+
+  let shooters = [];
+
+  for(let i = 0; i < 3; i++) {
+    let shooter = function() { // shooter 函数
+      console.log( i ); // 应该显示它自己的编号
+    };
+    shooters.push(shooter);
+  }
+
+  return shooters;
+}
+
+let army = makeArmy();
+
+army[0](); // 0
+army[1](); // 1
+army[2](); // 2
+```
+
+图示：
+
+![](images/词法环境/词法环境-代码块内创建函数.png)
+
+所以，换作其他的代码块也是同理可得，而且其他代码块不像循环执行那么多次，所以就更加简单。自己也可以写一些例子画个图来验证一下是否符合。
+
+词法环境我认为是一个很重要的知识点，理解它不仅能够让我们更清晰地知道JavaScript是如何运作的，而且还能更好地知道自己写的代码究竟占了多大的内存。
+
