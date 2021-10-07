@@ -1,20 +1,20 @@
 "use strict"
 
-// let user = {
-//   name : "john",
-//   f(...str){
-//     console.log(this.name);
-//     console.log(...str);
-//   }
-// }
+let user = {
+  name : "john",
+  f(...str){
+    console.log(this.name);
+    console.log(...str);
+  }
+}
 
-// let admin = {
-//   name : "Pete",
-//   f(...str){
-//     console.log(this.name);
-//     console.log(...str);
-//   }
-// }
+let admin = {
+  name : "Pete",
+  f(...str){
+    console.log(this.name);
+    console.log(...str);
+  }
+}
 
 // function throttle(func, ms) {
 
@@ -46,13 +46,13 @@
 //   return wrapper;
 // }
 
-user.f = throttle(user.f, 1000);
-admin.f = throttle(admin.f, 1000);
+// user.f = throttle(user.f, 1000);
+// admin.f = throttle(admin.f, 1000);
 
 
 function throttle(fx, ms){
   let t = null;
-  let count = 0;
+  let count = true;
   let cache = new Map();
   function time(...str){
     let savedThis = this;
@@ -60,14 +60,17 @@ function throttle(fx, ms){
       fx.apply(savedThis,str);
     }
     function stop(){
-      count = 0;
-      cache.get("f")();
+      if(cache.size > 0){
+        cache.get("f")();
+        cache.clear();
+        t = setTimeout(stop, ms);
+      }
     }
 
     cache.set("f", f1);
 
-    if(count === 0){
-      count = 1;
+    if(count){
+      count = false;
       cache.get("f")();
       t = setTimeout(stop, ms);
     }
@@ -82,6 +85,11 @@ user.f(1);
 admin.f(2);
 user.f(2);
 admin.f(2);
+
+for(let i = 0; i < 9000000; i++){
+  let j = i;
+}
+
 user.f(3);
 admin.f(4);
 user.f(5);
