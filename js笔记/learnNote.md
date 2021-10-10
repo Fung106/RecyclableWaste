@@ -480,3 +480,73 @@ army[2](); // 2
 
 词法环境我认为是一个很重要的知识点，理解它不仅能够让我们更清晰地知道JavaScript是如何运作的，而且还能更好地知道自己写的代码究竟占了多大的内存。
 
+
+
+## 函数绑定
+
+- **二次bind**
+
+`f.bind(...)` 返回的外来（exotic）[绑定函数](https://tc39.github.io/ecma262/#sec-bound-function-exotic-objects) 对象仅在创建的时候记忆上下文（以及参数，如果提供了的话）。
+
+一个函数不能被重绑定（re-bound）。这句话的意思是这个函数如果是被绑定后的结果，那么它不能再被绑定，如下例子：
+
+```javascript
+/* 例子1 */
+function f() {
+  console.log(this.name);
+}
+f = f.bind( {name: "John"} ).bind( {name: "Pete"} );//函数不能够在被绑定的基础上再进行绑定
+f(); // John
+
+/* 上面的例子1可以重写成以下形式 */
+function f() {
+  console.log(this.name);
+}
+//这个形式也是函数在被绑定的基础上再进行绑定
+let a = f.bind( {name: "John"} );//函数a属于是被绑定后的函数
+let b = a.bind( {name: "Pete"} );//这里对函数a进行再绑定
+a(); // John
+b(); // John
+
+/* 例子2 */
+function f() {
+  console.log(this.name);
+}  
+//这个形式不算函数在被绑定的基础上再进行绑定，函数a与函数b均为第一次被绑定
+let a = f.bind( {name: "John"} );
+let b = f.bind( {name: "Pete"} );
+a(); // John
+b();//Pete
+```
+
+- **bind后的属性**
+
+`bind` 的结果是另一个对象。
+
+```javascript
+/* bind后 */
+function sayHi() {
+  console.log( this.name );
+}
+sayHi.test = 5;
+
+let bound = sayHi.bind({
+  name: "John"
+});
+
+console.log( bound.test ); // undefined
+//bind后返回的是另一个对象，sayHi和bound指向不同的对象，所以bound访问不了test
+
+
+/* 普通赋值 */
+function sayHi() {
+  console.log( 1 );//不使用bind，修改这里的原因是因为如果还是打印this.name，就会报错，因为this丢失
+}
+sayHi.test = 5;
+
+let bound = sayHi;
+
+console.log( bound.test ); 
+// 5，因为函数也是个值，类型为引用，是个特殊的对象，sayHi和bound都指向用一个对象，所以它们都能访问同一个属性test
+```
+
