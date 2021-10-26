@@ -245,7 +245,12 @@ function User(){
 "use strict"
 
 function User(){
-  //let this = {}; 隐式创建一个名为this的对象的引用，它指向一个什么属性都没有的对象
+    /* 
+  this = {};
+  隐式创建一个名为this的对象的引用，它指向一个什么属性都没有的对象，它是属于User对象，
+  和普通的 let user = {} 不一样，因为 let user = {} 相当于let user = new Object(),
+  Object构造器内的this属于Object对象
+   */
   this.name = "Pete";//为这个对象添加属性
   //return this; 这个构造器最后隐式返回这个this
 }
