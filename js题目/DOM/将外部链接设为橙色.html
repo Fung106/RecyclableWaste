@@ -1,0 +1,43 @@
+<!DOCTYPE HTML>
+<html>
+
+<body>
+  <!--
+    通过修改 style 属性，将所有外部链接变为橙色。
+
+    如果一个链接是外部的：
+    其 href 中包含 ://
+    但不是以 http://internal.com 开头。
+    
+    -->
+  <a name="list">The list:</a>
+  <ul>
+    <li><a href="http://google.com">http://google.com</a></li>
+    <li><a href="/tutorial">/tutorial.html</a></li>
+    <li><a href="local/path">local/path</a></li>
+    <li><a href="ftp://ftp.com/my.zip">ftp://ftp.com/my.zip</a></li>
+    <li><a href="http://nodejs.org">http://nodejs.org</a></li>
+    <li><a href="http://internal.com/test">http://internal.com/test</a></li>
+    <li><a href="https://zh.javascript.info/dom-attributes-and-properties#tasks">答案（在底部）</a></li>
+  </ul>
+
+  <script>
+    // ...your code...
+    let aList = document.querySelectorAll("a");
+    let regHeader = /^http:\/\/internal\.com/;
+    let regOutLink = /:|：\/\//g;
+    for (let item of aList) {
+      let href = item.getAttribute("href");
+      if (href) {
+        if (!regHeader.test(href)) {
+          if (regOutLink.test(href)) {
+            item.style.color = 'orange';
+          }
+        }
+      }
+    }
+  </script>
+
+</body>
+
+</html>
