@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="container"></div>
+    <a href="https://plnkr.co/edit/A3ydVJVb9IZFuOdP?p=preview&preview">2.答案（第二种方式）</a>
+</body>
+<script>
+    let data = {
+        "Fish": {
+            "trout": {},
+            "salmon": {}
+        },
+
+        "Tree": {
+            "Huge": {
+                "sequoia": {},
+                "oak": {}
+            },
+            "Flowering": {
+                "apple tree": {},
+                "magnolia": {}
+            }
+        }
+    };
+
+    //创建节点树，并使用 DOM 方法将它们附加（append）上去。
+    function createTree(container, data) {
+        function search(obj, ul) {
+            for (let key in obj) {
+                let li = document.createElement("li");
+                li.textContent = key;
+                ul.append(li);
+                if (Object.keys(obj[key]).length) {
+                    let ul_1 = document.createElement("ul");
+                    li.append(ul_1);
+                    search(obj[key], ul_1);
+                }
+            }
+        }
+
+        let ul = document.createElement("ul");
+
+        container.append(ul);
+        search(data, ul);
+    }
+
+    let container = document.getElementById('container');
+    createTree(container, data);
+</script>
+
+</html>
