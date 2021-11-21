@@ -9,13 +9,18 @@
 </head>
 
 <body>
+
+    
     <div id="container"></div>
+    <a href="https://plnkr.co/edit/rrQtYB4lzDPAKWVn?p=preview&preview">1.答案（第一种方式）</a><br>
     <a href="https://plnkr.co/edit/A3ydVJVb9IZFuOdP?p=preview&preview">2.答案（第二种方式）</a>
 </body>
 <script>
+    // 编写一个函数 createTree，从嵌套对象创建一个嵌套的 ul/li 列表（list）。
     let data = {
         "Fish": {
-            "trout": {},
+            "trout": {
+            },
             "salmon": {}
         },
 
@@ -31,7 +36,7 @@
         }
     };
 
-    //创建节点树，并使用 DOM 方法将它们附加（append）上去。
+    //方法二：创建节点树，并使用 DOM 方法将它们附加（append）上去。
     function createTree(container, data) {
         function search(obj, ul) {
             for (let key in obj) {
@@ -52,6 +57,26 @@
         search(data, ul);
     }
 
+/* 
+    //方法一：为树创建 HTML，然后将它们赋值给 container.innerHTML
+    function createTree(container, data) {
+        function search(obj) {
+            let li = "";
+            for (let key in obj) {
+                if (Object.keys(obj[key]).length) {
+                    li = li + "<li>" + key + "<ul>" + search(obj[key]) + "</ul>" + "</li>";
+                }else{
+                    li = li + "<li>" + key + "</li>";
+                }
+            }
+            return li;
+        }
+        let ul = "<ul>" + search(data) + "</ul>";
+        container.innerHTML = ul;
+        
+    }
+ */
+    
     let container = document.getElementById('container');
     createTree(container, data);
 </script>
