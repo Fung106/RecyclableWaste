@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    table {
+      border-collapse: collapse;
+    }
+
+    td,
+    th {
+      border: 1px solid black;
+      padding: 3px;
+      text-align: center;
+    }
+
+    th {
+      font-weight: bold;
+      background-color: #E6E6E6;
+    }
+  </style>
+</head>
+
+<body>
+  <a href="https://plnkr.co/edit/jiumwkj1Et9ZnlTr?p=preview&preview">答案</a><br>
+  <label>年份：</label>
+  <select id="year"></select>
+  <label>月份：</label>
+  <select id="month"></select><br><br>
+
+  <input type="button" onclick="getYaerOptionAndMonthOption()" value="生成月历"><br>
+
+  <div id="calendar"></div>
+
+  <script>
+    /* 
+    编写一个函数 createCalendar(elem, year, month)。
+
+    对该函数的调用，应该使用给定的 year / month 创建一个日历，并将创建的日历放入 elem 中。
+
+    创建的日历应该是一个表格（table），其中每一周用 < tr > 表示，每一天用 < td > 表示。表格顶部应该是带有星期名的 < th >：第一天应该是 Monday，依此类推，直到 Sunday。
+ */
+    function createCalendar(elem, year, month) {
+      // ...your code that generates the calndar in elem...
+      let weekday = {
+        1: "MO",
+        2: "TU",
+        3: "WE",
+        4: "TH",
+        5: "FR",
+        6: "SA",
+        7: "SU",
+      };
+      let start = new Date(year, month - 1).getDay();
+      let end = new Date(year, month, 0).getDate();
+      let table = document.createElement("table");
+      let day = 0;
+
+      if (start === 0) {
+        start = 7;
+      }
+      for (let item in weekday) {
+        let th = document.createElement("th");
+        th.textContent = weekday[item];
+        table.append(th);
+      }
+
+      for (let i = 0; ; i++) {
+        let tr = document.createElement("tr");
+        for (let j = 0; j < 7; j++) {
+          let td = document.createElement("td");
+          if (j + 1 < start && i === 0) {
+            tr.append(td);
+          } else {
+            if (day < end) {
+              day++;
+              td.textContent = day;
+              tr.append(td);
+            } else {
+              tr.append(td);
+            }
+          }
+        }
+        table.append(tr);
+        if (day === end) {
+          break;
+        }
+      }
+      elem.append(table);
+    }
+
+    function createSelect() {
+      let currentYear = new Date();
+      for (let i = 1998; i < currentYear.getFullYear() + 1; i++) {
+        let yearOption = document.createElement("option");
+        yearOption.textContent = i;
+        yearOption.value = i;
+        year.append(yearOption);
+      }
+      for (let i = 1; i <= 12; i++) {
+        let monthOption = document.createElement("option");
+        monthOption.textContent = i;
+        monthOption.value = i;
+        month.append(monthOption);
+      }
+    }
+
+    function getYaerOptionAndMonthOption() {
+      let calendar = document.querySelector("#calendar");
+      calendar.innerHTML = "";
+      let yearSelect = document.querySelector("#year");
+      let monthSelect = document.querySelector("#month");
+      let year = yearSelect.value;
+      let month = monthSelect.value;
+      createCalendar(calendar, year, month);
+    }
+
+    createSelect();
+
+  </script>
+
+</body>
+
+</html>
