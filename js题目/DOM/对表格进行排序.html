@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <a href="https://plnkr.co/edit/0twdtBybVELYLe5n?p=preview&preview">答案（降维打击）</a>
+  <table id="table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Surname</th>
+        <th>Age</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>J</td>
+        <td>Smith</td>
+        <td>10</td>
+      </tr>
+      <tr>
+        <td>P</td>
+        <td>Brown</td>
+        <td>15</td>
+      </tr>
+      <tr>
+        <td>A</td>
+        <td>Lee</td>
+        <td>5</td>
+      </tr>
+      <tr>
+        <td>...</td>
+        <td>...</td>
+        <td>...</td>
+      </tr>
+      <tr>
+        <td>H</td>
+        <td>Ford</td>
+        <td>...</td>
+      </tr>
+      <tr>
+        <td>Z</td>
+        <td>Raul</td>
+        <td>...</td>
+      </tr>
+      <tr>
+        <td>Y</td>
+        <td>Mars</td>
+        <td>...</td>
+      </tr>
+    </tbody>
+  </table>
+</body>
+<script>
+  //编写代码，按 "name" 列对其进行排序。
+  let tbody = document.querySelector("tbody");
+  let tr = tbody.getElementsByTagName("tr");
+  function sortForName(tr) {
+    for (let index = 0; index < tr.length; index++) {
+      for (let j = index + 1; j < tr.length; j++) {
+        let a = tr[index].getElementsByTagName("td")[0].innerText;
+        let b = tr[j].getElementsByTagName("td")[0].innerText;
+        if (a.localeCompare(b) > 0) {
+          tr[index].before(tr[j]);
+        }
+      }
+    }
+  }
+  sortForName(tr);
+</script>
+
+</html>

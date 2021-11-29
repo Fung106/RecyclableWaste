@@ -1,0 +1,61 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <style>
+    h.HH {
+      color: red;
+    }
+
+    h.MM {
+      color: green;
+    }
+
+    h.SS {
+      color: blue;
+    }
+  </style>
+</head>
+
+<body>
+  <h class="HH"></h>
+  <h class="MM"></h>
+  <h class="SS"></h><br>
+ 
+  <!-- click on this button calls clockStart() -->
+  <input type="button" onclick="clockStart()" value="Start">
+
+  <!-- click on this button calls clockStop() -->
+  <input type="button" onclick="clockStop()" value="Stop"><br>
+  <a href="https://plnkr.co/edit/fGaR88FCiyiw1YHp?p=preview&preview">答案</a>
+
+</body>
+<script>
+  let i;
+  let HH = document.querySelector(".HH");
+  let MM = document.querySelector(".MM");
+  let SS = document.querySelector(".SS");
+  function clockStart() {
+    //应将定时器内的箭头函数提取出来，在调用定时器前先执行一次这个函数，这样就能够在点击start的时候立即得到时间。
+    //以下代码点击start就会导致有一秒钟的空白期，这是我没有考虑全面的一点。详细参考答案
+    i = setInterval(() => {
+      let date = new Date();
+      let second = "0" + date.getSeconds();
+      second = second.slice(-2);
+      let minute = "0" + date.getMinutes();
+      minute = minute.slice(-2);
+      let hour = "0" + date.getHours();
+      hour = hour.slice(-2);
+      HH.textContent = `${hour}:`;
+      MM.textContent = `${minute}:`;
+      SS.textContent = `${second}`;
+    }, 1000);
+
+  }
+
+  function clockStop() {
+    clearInterval(i);
+  }
+</script>
+
+</html>
