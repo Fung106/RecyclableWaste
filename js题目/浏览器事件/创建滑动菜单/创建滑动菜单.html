@@ -1,0 +1,86 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <style>
+        #menu {
+            width: 500px;
+        }
+
+        .open {
+            float: left;
+            color: green;
+            cursor: pointer;
+        }
+
+        .close {
+            float: left;
+            width: 20px;
+            color: green;
+            cursor: pointer;
+        }
+
+        .text {
+            width: 155px;
+            padding-left: 15px;
+            cursor: pointer;
+        }
+
+        ul {
+            margin-top: -1px;
+            margin-left: -20px;
+            list-style: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="menu">
+        <div class="open">▶</div>
+        <div class="close">▼</div>
+        <div class="text">Sweeties (click me)!</div>
+        <ul>
+            <li>Cake</li>
+            <li>Donut</li>
+            <li>Honey</li>
+            <li>
+                <a href="https://plnkr.co/edit/GPCsb1aKinKa8USX?p=preview&preview">答案</a>
+            </li>
+        </ul>
+    </div>
+
+</body>
+<script>
+    function display() {
+        if (!open1.style.display) {
+            open1.style.display = "none";
+        } else {
+            open1.style.display = "";
+        }
+
+        if (!close1.style.display) {
+            close1.style.display = "none";
+        } else {
+            close1.style.display = "";
+        }
+
+        if (!ul.style.display) {
+            ul.style.display = "none";
+        } else {
+            ul.style.display = "";
+        }
+    }
+    let ul = document.querySelector("ul");
+    let open1 = document.querySelector(".open");
+    let close1 = document.querySelector(".close");
+    let button = document.querySelector(".text");
+    close1.style.display = "none";
+    ul.style.display = "none";
+    button.addEventListener('click', display);
+    open1.addEventListener('click', display);
+    close1.addEventListener('click', display);
+</script>
+
+</html>

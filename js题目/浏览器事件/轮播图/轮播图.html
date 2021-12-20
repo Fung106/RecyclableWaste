@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- create your markup and styles -->
+    <div class="outside">
+        <button class="arrow">⇦</button>
+        <button class="arrow">⇨</button>
+        <div id="carousel">
+            <ul>
+                <li><img src="https://en.js.cx/carousel/1.png"></li>
+                <li><img src="https://en.js.cx/carousel/2.png"></li>
+                <li><img src="https://en.js.cx/carousel/3.png"></li>
+                <li><img src="https://en.js.cx/carousel/4.png"></li>
+                <li><img src="https://en.js.cx/carousel/5.png"></li>
+                <li><img src="https://en.js.cx/carousel/6.png"></li>
+                <li><img src="https://en.js.cx/carousel/7.png"></li>
+                <li><img src="https://en.js.cx/carousel/8.png"></li>
+                <li><img src="https://en.js.cx/carousel/9.png"></li>
+                <li><img src="https://en.js.cx/carousel/10.png"></li>
+            </ul>
+        </div>
+    </div>
+    <button id="add">添加图片</button>
+    <button id="delete1">删除图片</button><br>
+    <a href="https://plnkr.co/edit/EmQzJDMXgEp2Vqyh?p=preview&preview">答案的轮播图</a>
+</body>
+<script>
+    // ...your code to make carousel alive!
+    console.log(carousel.scrollLeft);
+    let button = document.querySelectorAll('button');
+    //设置button位置
+    button[0].style.float = 'left';
+    button[0].style.marginTop = '50px';
+    button[1].style.float = 'right';
+    button[1].style.marginTop = '50px';
+
+    let img = document.getElementsByTagName('img');
+    let ul = document.getElementsByTagName('ul');
+    let sum = 0;
+    let carouselScrollLeft = 0;//由于获取的滚动长度带有小数点，很难计算准确，因此创建此变量代替
+    let ms = 1500//间隔事件，单位为毫秒
+    let scrollTimer = null//滚动计时器
+    //获取图象带总长度
+    function getImgLength() {
+        let img = document.getElementsByTagName('img');
+        sum = 0;
+        img = Array.from(img);//因ing获取到的是类数组，不是真正的数组，因此需要转成数组
+        img.forEach(element => {
+            sum += element.offsetWidth;
+        });
+        ul[0].style.width = sum + "px";
+    }
+
+    function scrollRight() {
+        carouselScrollLeft += img[0].offsetWidth * 3;
+        carousel.scrollLeft = carouselScrollLeft;
+        console.log(`已经滚动了：${carousel.scrollLeft}`);
+
+        if (carouselScrollLeft >= sum) {
+            carousel.scrollLeft = 0;
+            carouselScrollLeft = 0;
+        }
+    }
+
+    function scrollLeft() {
+        carouselScrollLeft -= img[0].offsetWidth * 3;
+        carousel.scrollLeft = carouselScrollLeft;
+        console.log(`已经滚动了：${carousel.scrollLeft}`);
+        if (carouselScrollLeft <= 0) {
+            carousel.scrollLeft = 0;
+            carouselScrollLeft = 0;
+        }
+    }
+
+    function timer() {
+        scrollTimer = setTimeout(function timer() {
+            scrollRight();
+            scrollTimer = setTimeout(timer, ms);
+        }, ms);
+    }
+
+    getImgLength();
+    console.log(`总长度：${sum}`);
+
+    //点击button切换图像
+    button[0].addEventListener('click', function () {
+        clearTimeout(scrollTimer);
+        scrollLeft();
+        timer();
+    });
+
+    button[1].addEventListener('click', function () {
+        clearTimeout(scrollTimer);
+        scrollRight();
+        timer();
+    });
+
+    add.addEventListener('click', function () {
+        let li = document.createElement('li');
+        let img = document.createElement('img');
+        img.src = 'https://en.js.cx/carousel/10.png';
+        li.append(img);
+        ul[0].append(li);
+        getImgLength();
+    });
+
+    delete1.addEventListener('click', function () {
+        let ul = document.getElementsByTagName('ul');
+        let li = ul[0].getElementsByTagName('li');
+        li[li.length - 1].remove();
+        getImgLength();
+    });
+
+    timer();
+
+</script>
+
+</html>
