@@ -1,0 +1,8 @@
+.tree {
+    width: auto;
+}
+
+ul > li > span:hover{
+    font-weight: bold;
+    cursor: pointer;
+}
