@@ -1,0 +1,66 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <style>
+        .selected {
+            background: #0f0;
+        }
+
+        li {
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    Click on a list item to select it.
+    <br>
+
+    <ul id="ul">
+        <li>Christopher Robin</li>
+        <li>Winnie-the-Pooh</li>
+        <li>Tigger</li>
+        <li>Kanga</li>
+        <li>Rabbit. Just rabbit.</li>
+    </ul>
+
+    <script>
+        // ...your code...
+        /* 
+        点击列表元素，只选择该元素（添加.selected 类），取消选择其他所有元素。
+        如果点击时，按键 Ctrl（在 Mac 中为 Cmd）是被按下的，则选择会被切换到被点击的元素上，但其他元素不会被改动。
+        */
+        ul.addEventListener('mousedown', function (event) {
+            event.preventDefault();
+        });
+
+        ul.addEventListener('click', function (event) {
+            let li = event.target.closest('li');
+
+            if (event.metaKey || event.ctrlKey) {
+
+                li.classList.toggle('selected');
+
+            } else {
+
+                let lis = ul.getElementsByTagName('li');
+
+                for (let item = 0; item < lis.length; item++) {
+                    if (lis[item].classList.contains('selected')) {
+                        lis[item].classList.remove('selected');
+                    }
+                }
+
+                li.classList.add('selected');
+
+            }
+        });
+
+    </script>
+
+</body>
+
+</html>
