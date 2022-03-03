@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <div id="slider" class="slider">
+    <div class="thumb"></div>
+  </div>
+
+  <script>
+    // ...your code...
+    let sliderRect = slider.getBoundingClientRect();
+    let thumb = document.getElementsByClassName('thumb')[0];
+
+    thumb.onmousedown = function (event) {
+      let shiftX = event.clientX - thumb.getBoundingClientRect().left;
+
+      function move(event1) {
+        let left = event1.clientX - sliderRect.left - shiftX;
+
+        thumb.style.left = left + 'px';
+        if (left <= 0) {
+          thumb.style.left = 0 + 'px';
+        } else if (left > slider.offsetWidth - thumb.offsetWidth) {
+          thumb.style.left = slider.offsetWidth - thumb.offsetWidth + 'px';
+        }
+
+      }
+
+      document.addEventListener('mousemove', move);
+
+      document.onmouseup = function () {
+        document.removeEventListener('mousemove', move);
+        document.onmouseup = null;
+      };
+    };
+
+    thumb.ondragstart = function () {
+      return false;
+    };
+
+  </script>
+
+</body>
+
+</html>
