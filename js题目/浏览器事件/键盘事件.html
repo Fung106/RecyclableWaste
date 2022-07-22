@@ -13,36 +13,50 @@
 </body>
 <script>
 
-    /* 
-    Set对象在keyup事件发生和func函数执行完毕，都要对其及时地清空，以防按键残留。
-    用Set对象是为了防止按键大量重复堆积。
-    */
-    let key = new Set();
 
-    function runOnKeys(func, code) {
-        let flag = false;
-        let q_w = ['Q', 'W', 'q', 'w'];
 
-        let upper = (code.has(q_w[0]) && code.has(q_w[1]));
-        let lower = (code.has(q_w[2]) && code.has(q_w[3]));
-        flag = (upper || lower);
+    function runOnKeys(func, ...code) {
+        /* 
+        Set对象在keyup事件发生和func函数执行完毕，都要对其及时地清空，以防按键残留。
+        用Set对象是为了防止按键大量重复堆积。
+        */
+        let key = new Set();
+        document.addEventListener('keydown', function onKeyDown(keydownEvent) {
+            let flag = false;
 
-        if (flag) {
-            func();
-            code.clear();
-        }
-    }
+            key.add(keydownEvent.code);
+            console.log(key);
 
-    document.addEventListener('keydown', function onKeyDown(keydownEvent) {
+            for (let index = 0; index < code.length; index++) {
+                if (key.has(code[index])) {
+                    flag = true;
+                } else {
+                    flag = false;
+                    break;
+                }
+            }
+
+            console.log(flag);
+            console.log(key);
+            if (flag) {
+                func();
+                key.clear();
+                console.log(key);
+            }
+        });
+
         document.addEventListener('keyup', function () {
             key.clear();
             console.log(key);
         });
-        key.add(keydownEvent.key);
-        runOnKeys(() => alert("Hello!"), key);
-        console.log(key);
-    });
 
+    }
+
+    runOnKeys(
+        () => alert("Hello!"),
+        "KeyQ",
+        "KeyW"
+    );
 
 
 </script>
