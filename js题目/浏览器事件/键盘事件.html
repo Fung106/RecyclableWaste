@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <p>将按键 "Q" 和 "W" 一起按下（在任何语言中都行）。</p>
+</body>
+<script>
+
+    /* 
+    Set对象在keyup事件发生和func函数执行完毕，都要对其及时地清空，以防按键残留。
+    用Set对象是为了防止按键大量重复堆积。
+    */
+    let key = new Set();
+
+    function runOnKeys(func, code) {
+        let flag = false;
+        let q_w = ['Q', 'W', 'q', 'w'];
+
+        let upper = (code.has(q_w[0]) && code.has(q_w[1]));
+        let lower = (code.has(q_w[2]) && code.has(q_w[3]));
+        flag = (upper || lower);
+
+        if (flag) {
+            func();
+            code.clear();
+        }
+    }
+
+    document.addEventListener('keydown', function onKeyDown(keydownEvent) {
+        document.addEventListener('keyup', function () {
+            key.clear();
+            console.log(key);
+        });
+        key.add(keydownEvent.key);
+        runOnKeys(() => alert("Hello!"), key);
+        console.log(key);
+    });
+
+
+
+</script>
+
+</html>
