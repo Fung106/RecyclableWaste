@@ -23,7 +23,7 @@
         document.body.append(p);
 
       }
-      
+
       let windowClientHeight = document.documentElement.clientHeight;
       let scrollHeight = document.documentElement.scrollHeight;
 
@@ -33,9 +33,9 @@
           p.innerText = new Date();
           document.body.append(p);
         }
+        oldScrollTop = document.documentElement.scrollTop;
       }
 
-      oldScrollTop = document.documentElement.scrollTop;
     }
 
 
