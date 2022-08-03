@@ -1,0 +1,81 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <style>
+    body,
+    html {
+      height: 100%;
+      width: 100%;
+      padding: 0;
+      margin: 0;
+    }
+
+    #matrix {
+      width: 400px;
+      margin: auto;
+      overflow: auto;
+      text-align: justify;
+    }
+
+    #arrowTop {
+      height: 9px;
+      width: 14px;
+      color: green;
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      cursor: pointer;
+    }
+
+    #arrowTop::before {
+      content: '▲';
+    }
+  </style>
+  <meta charset="utf-8">
+</head>
+
+<body>
+
+  <div id="matrix">
+    <script>
+      for (let i = 0; i < 2000; i++) document.writeln(i)
+    </script>
+  </div>
+
+  <div id="arrowTop"></div>
+
+  <script>
+    /* 
+    创建一个“到顶部”按钮来帮助页面滚动。
+    它应该像这样运行：
+    1.页面向下滚动的距离没有超过窗口高度时 —— 按钮不可见。
+    2.当页面向下滚动距离超过窗口高度时 —— 在左上角出现一个“向上”的箭头。如果页面回滚回去，箭头就会消失。
+    3.单击箭头时，页面将滚动到顶部。 
+    */
+    // ... your code ...
+    arrowTop.hidden = true;
+    window.addEventListener('scroll', function () {
+      let scrollTop = document.documentElement.scrollTop;
+      let windowClientHeight = document.documentElement.clientHeight;
+      console.log(`windowClientHeight: ${windowClientHeight}`);
+      console.log(`scrollTop: ${scrollTop}`);
+
+      if (scrollTop >= windowClientHeight) {
+        arrowTop.hidden = false;
+
+        arrowTop.addEventListener('click', function jumpToTop(clickEvent) {
+          window.scrollTo(0, 0);
+          arrowTop.hidden = true;
+          arrowTop.removeEventListener('click', jumpToTop);
+        });
+
+      } else {
+        arrowTop.hidden = true;
+      }
+    });
+  </script>
+
+</body>
+
+</html>
