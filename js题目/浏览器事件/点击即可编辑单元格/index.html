@@ -1,0 +1,83 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <meta charset="utf-8">
+</head>
+
+<body>
+  <link rel="stylesheet" href="bagua.css">
+  <link rel="stylesheet" href="my.css">
+
+
+  <p>Click on a table cell to edit it. Press OK or CANCEL when you finish.</p>
+
+  <p>1.点击时 —— 单元格应该变成“可编辑的”（在里面会出现文本区域），我们修改其中的 HTML。在这不调整单元格大小，所有几何形状保持不变。</p>
+  <p>2.OK 和 CANCEL 按钮会出现在单元格的下面，用以完成/取消编辑。</p>
+  <p>3.同一时刻只有一个单元格可被编辑。当一个 &lt;td&gt; 处于“编辑模式”时，在其它单元格上的点击会被忽略。</p>
+  <p>4.该表格可能有很多单元格。请使用事件委托。</p>
+
+  <table id="bagua-table">
+    <tr>
+      <th colspan="3"><em>Bagua</em> Chart: Direction, Element, Color, Meaning</th>
+    </tr>
+    <tr>
+      <td class="nw"><strong>Northwest</strong>
+        <br>Metal
+        <br>Silver
+        <br>Elders
+      </td>
+      <td class="n"><strong>North</strong>
+        <br>Water
+        <br>Blue
+        <br>Change
+      </td>
+      <td class="ne"><strong>Northeast</strong>
+        <br>Earth
+        <br>Yellow
+        <br>Direction
+      </td>
+    </tr>
+    <tr>
+      <td class="w"><strong>West</strong>
+        <br>Metal
+        <br>Gold
+        <br>Youth
+      </td>
+      <td class="c"><strong>Center</strong>
+        <br>All
+        <br>Purple
+        <br>Harmony
+      </td>
+      <td class="e"><strong>East</strong>
+        <br>Wood
+        <br>Blue
+        <br>Future
+      </td>
+    </tr>
+    <tr>
+      <td class="sw"><strong>Southwest</strong>
+        <br>Earth
+        <br>Brown
+        <br>Tranquility
+      </td>
+      <td class="s"><strong>South</strong>
+        <br>Fire
+        <br>Orange
+        <br>Fame
+      </td>
+      <td class="se"><strong>Southeast</strong>
+        <br>Wood
+        <br>Green
+        <br>Romance
+      </td>
+    </tr>
+
+  </table>
+
+
+  <script src="script.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,18 @@
+/* your styles */
+.edit_area {
+    border: none;
+    padding: 0;
+    display: block;
+    /* 使textarea无法拉拽 */
+    resize: none;
+    /* 使textarea聚焦时不显示边框 */
+    outline: none;
+}
+
+.edit_td {
+    padding: 0;
+}
+
+.div_control {
+    position: absolute;
+}
