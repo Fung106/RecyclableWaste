@@ -1,0 +1,114 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <style>
+    #mouse {
+      display: inline-block;
+      cursor: pointer;
+      margin: 0;
+    }
+
+    #mouse:focus {
+      outline: 1px dashed black;
+    }
+  </style>
+</head>
+
+<body>
+
+  <p>用鼠标点击以下老鼠，并使用键盘的方向键移动它。</p>
+
+  <pre id="mouse">
+ _   _
+(q\_/p)
+ /. .\
+=\_t_/=   __
+ /   \   (
+((   ))   )
+/\) (/\  /
+\  Y  /-'
+ nn^nn
+</pre>
+
+
+  <script>
+    // ...your code...
+    let mouse = document.getElementById('mouse');
+    mouse.tabIndex = "1";
+    mouse.addEventListener('focus', function () {
+
+      let mouseHeight = mouse.offsetHeight;
+      let mouseWidth = mouse.offsetWidth;
+
+      function initializeLocation() {
+        let initLeft = mouse.getBoundingClientRect().left;
+        let initTop = mouse.getBoundingClientRect().top;
+        mouse.style.position = 'fixed';
+        mouse.style.left = initLeft + 'px';
+        mouse.style.top = initTop + 'px';
+      }
+
+      function finalLocation() {
+        let initLeft = mouse.getBoundingClientRect().left;
+        let initTop = mouse.getBoundingClientRect().top;
+        mouse.style.position = 'absolute';
+        mouse.style.left = initLeft + window.pageXOffset + 'px';
+        mouse.style.top = initTop + window.pageYOffset + 'px';
+      }
+
+      function moveTop() {
+        let top = mouse.getBoundingClientRect().top;
+        mouse.style.top = top - mouseHeight + 'px';
+      }
+
+      function moveButtom() {
+        let top = mouse.getBoundingClientRect().top;
+        mouse.style.top = top + mouseHeight + 'px';
+      }
+
+      function moveLeft() {
+        let left = mouse.getBoundingClientRect().left;
+        mouse.style.left = left - mouseWidth + 'px';
+      }
+
+      function moveRight() {
+        let left = mouse.getBoundingClientRect().left;
+        mouse.style.left = left + mouseWidth + 'px';
+      }
+
+      function keyDown(keyEvent) {
+
+        if (keyEvent.key === 'ArrowUp') {
+          moveTop();
+        }
+
+        if (keyEvent.key === 'ArrowDown') {
+          moveButtom();
+        }
+
+        if (keyEvent.key === 'ArrowLeft') {
+          moveLeft();
+        }
+
+        if (keyEvent.key === 'ArrowRight') {
+          moveRight();
+        }
+      }
+
+      initializeLocation();
+
+      mouse.addEventListener('keydown', keyDown);
+
+      mouse.addEventListener('blur', function () {
+        finalLocation();
+        mouse.removeEventListener('keydown', keyDown);
+      });
+
+    });
+  </script>
+
+</body>
+
+</html>
